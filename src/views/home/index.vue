@@ -1,22 +1,33 @@
 <template>
   <t-layout-page class="dashboard-container">
     <t-layout-page-item>
-      <!-- 用户信息 -->
-      <div class="mb-8">
-        <el-card class="w-full">
-          <div class="flex-box flex-between flex-wrap">
-            <div class="flex-box flex-ver-v">
-              <img class="user-avatar" src="@/assets/logo/logo.png" />
-              <span class="ml-[10px] text-[16px]" style="margin-left: 5px">
-                {{ username || "wocwin" }}
-              </span>
-            </div>
-          </div>
-        </el-card>
+      <div class="search-container">
+        <img src="/public/search.jpg" alt="Google Logo" class="logo" />
+        <el-input
+          v-model="keyword"
+          placeholder="在 Google 上搜索，或者输入一个网址"
+          clearable
+          size="large"
+          class="search-box"
+          @keyup.enter="search"
+        />
+        <div>
+          <el-button type="primary" size="large" class="search-btn">Google 搜索</el-button>
+          <el-button size="large" class="lucky-btn">我有时运气不佳</el-button>
+        </div>
+        <div class="links">
+          <a href="#">关于</a>
+          <a href="#">广告</a>
+          <a href="#">商业</a>
+          <a href="#">如何使用 Google 搜索</a>
+        </div>
       </div>
     </t-layout-page-item>
     <t-layout-page-item>
       <!-- Echarts 图表 -->
+      <span class="ml-[10px] text-[16px]" style="margin-left: 5px">
+        {{ username || "wocwin" }}
+      </span>
       <el-upload
         v-model:file-list="fileList"
         action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
@@ -53,9 +64,13 @@ const fileList = ref<UploadUserFile[]>([
     url: "/public/graph2.png"
   }
 ]);
-
+const keyword = ref("");
 const dialogImageUrl = ref(" ");
 const dialogVisible = ref(false);
+const search = () => {
+  // 在这里编写发送搜索请求的逻辑
+  console.log("搜索关键字：", keyword.value);
+};
 
 const handleRemove: UploadProps["onRemove"] = (uploadFile, uploadFiles) => {
   console.log(uploadFile, uploadFiles);
@@ -117,5 +132,50 @@ console.log("获取所有业务api接口", global.$api);
     aspect-ratio: 33.33%; /* 每行显示三张图片 */
     padding-bottom: 0;
   }
+}
+.search-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fff;
+}
+
+.logo {
+  margin-bottom: 30px;
+  width: 100px;
+  height: 100px;
+}
+
+.search-box {
+  width: 500px;
+  height: 48px;
+  font-size: 16px;
+  padding: 0 16px;
+  background-color: #fff;
+  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+  border-radius: 24px;
+  border: none;
+}
+
+.search-btn,
+.lucky-btn {
+  margin-top: 30px;
+  width: 200px;
+}
+
+.links {
+  margin-top: 50px;
+  font-size: 14px;
+  color: #5f6368;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.links a {
+  color: #5f6368;
+  text-decoration: none;
 }
 </style>
