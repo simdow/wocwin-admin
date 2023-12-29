@@ -5,7 +5,7 @@
       <div class="aside-box" :style="{ width: isCollapse ? '65px' : '210px' }">
         <div class="logo flx-center" @click="goIndex">
           <img class="logo-img" src="@/assets/logo/logo.png" alt="logo" />
-          <span class="logo-text" v-show="!isCollapse">wocwin Admin</span>
+          <span class="logo-text" v-show="!isCollapse">登录</span>
         </div>
         <el-scrollbar>
           <el-menu
