@@ -1,13 +1,23 @@
 <template>
-  <t-layout-page>
-    <t-layout-page-item>
-      <span class="text">我是menu2-3</span>
-      <el-input v-model="value" placeholder="测试缓存"></el-input>
-    </t-layout-page-item>
-  </t-layout-page>
+  <div class="app">
+    <!-- 其他内容 -->
+    <PhotoWall />
+  </div>
 </template>
 
-<script setup lang="ts" name="menu23">
-import { ref } from "vue";
-const value = ref("");
+<script>
+import PhotoWall from "./PhotoWall.vue";
+
+export default {
+  components: {
+    PhotoWall
+  }
+};
 </script>
+
+<style scoped>
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+</style>
