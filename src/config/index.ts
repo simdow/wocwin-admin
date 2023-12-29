@@ -6,6 +6,9 @@ export const HOME_URL: string = "/index";
 // 登录页地址（默认）
 export const LOGIN_URL: string = "/login";
 
+// // 注册页地址->还未写
+// export const REG_URL: string = "";
+
 // 默认主题颜色
 export const DEFAULT_PRIMARY: string = "#142969";
 

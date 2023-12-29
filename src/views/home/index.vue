@@ -1,7 +1,5 @@
 <template>
   <t-layout-page class="dashboard-container">
-    <!-- github角标 -->
-    <github-corner class="github-corner" />
     <t-layout-page-item>
       <!-- 用户信息 -->
       <div class="mb-8">
@@ -13,57 +11,60 @@
                 {{ username || "wocwin" }}
               </span>
             </div>
-            <div class="flex-box flex-ver-v" style="margin-top: 5px">
-              <a style="padding: 0 5px" href="https://github.com/vuejs/vue" target="_blank">
-                <img src="https://img.shields.io/badge/vue-3.2.47-brightgreen.svg" alt="vue3" />
-              </a>
-              <a style="padding: 0 5px" href="https://github.com/vitejs/vite" target="_blank">
-                <img src="https://img.shields.io/badge/vite-4.3.9-brightgreen.svg" alt="vite4" />
-              </a>
-              <a style="padding: 0 5px" href="https://github.com/wocwin/wocwin-admin/stargazers" target="_blank">
-                <img src="https://img.shields.io/github/stars/wocwin/wocwin-admin.svg" alt="wocwin-admin" />
-              </a>
-            </div>
-            <div class="space-x-2 flex-box flex-ver-v">
-              <el-divider direction="vertical" />
-              <el-link target="_blank" type="success" href="https://gitee.com/wocwin/wocwin-admin">Gitee源码</el-link>
-              <el-divider direction="vertical" />
-              <el-link target="_blank" type="primary" href="https://github.com/wocwin/wocwin-admin">GitHub源码 </el-link>
-            </div>
           </div>
         </el-card>
       </div>
     </t-layout-page-item>
     <t-layout-page-item>
       <!-- Echarts 图表 -->
-      <el-row :gutter="40">
-        <el-col :sm="24" :lg="8" class="mb-4">
-          <BarChart id="barChart" height="400px" width="100%" class="bg-[var(--el-bg-color-overlay)]" />
-        </el-col>
-
-        <el-col :xs="24" :sm="12" :lg="8" class="mb-4">
-          <PieChart id="pieChart" height="400px" width="100%" class="bg-[var(--el-bg-color-overlay)]" />
-        </el-col>
-
-        <el-col :xs="24" :sm="12" :lg="8" class="mb-4">
-          <RadarChart id="radarChart" height="400px" width="100%" class="bg-[var(--el-bg-color-overlay)]" />
-        </el-col>
-      </el-row>
+      <el-upload
+        v-model:file-list="fileList"
+        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        list-type="picture-card"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
+      >
+        <el-icon><Plus /></el-icon>
+      </el-upload>
+      <el-dialog v-model="dialogVisible">
+        <img w-full :src="dialogImageUrl" alt="Preview Image" style="max-width: 100%; max-height: 100%" />
+      </el-dialog>
     </t-layout-page-item>
   </t-layout-page>
 </template>
 <script setup lang="ts" name="Dashboard">
 import { useUserStore } from "@/store/modules/user";
-
-import GithubCorner from "./components/GithubCorner.vue";
-import BarChart from "./components/BarChart.vue";
-import PieChart from "./components/PieChart.vue";
-import RadarChart from "./components/RadarChart.vue";
-
+import { ref, computed, getCurrentInstance } from "vue";
+import { Plus } from "@element-plus/icons-vue";
+import type { UploadProps, UploadUserFile } from "element-plus";
 const userStore = useUserStore();
+
 const username = computed(() => userStore.name);
 const { appContext } = getCurrentInstance() as any;
 const global = appContext.config.globalProperties;
+
+const fileList = ref<UploadUserFile[]>([
+  {
+    name: "food.png",
+    url: "/public/graph1.png"
+  },
+  {
+    name: "graph2.png",
+    url: "/public/graph2.png"
+  }
+]);
+
+const dialogImageUrl = ref(" ");
+const dialogVisible = ref(false);
+
+const handleRemove: UploadProps["onRemove"] = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles);
+};
+
+const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
+  dialogImageUrl.value = uploadFile.url!;
+  dialogVisible.value = true;
+};
 // 获取所有业务api接口
 console.log("获取所有业务api接口", global.$api);
 </script>
@@ -82,14 +83,6 @@ console.log("获取所有业务api接口", global.$api);
     width: 100%;
   }
 
-  .github-corner {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 99;
-    border: 0;
-  }
-
   .data-box {
     display: flex;
     justify-content: space-between;
@@ -103,6 +96,26 @@ console.log("获取所有业务api接口", global.$api);
 
   .svg-icon {
     fill: currentcolor !important;
+  }
+  .el-upload-list__item {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .el-upload-list__item-thumbnail {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    aspect-ratio: 33.33%; /* 每行显示三张图片 */
+    padding-bottom: 0;
   }
 }
 </style>
